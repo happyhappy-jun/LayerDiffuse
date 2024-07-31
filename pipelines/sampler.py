@@ -32,7 +32,9 @@ class KModel:
     def __init__(self, unet, timesteps=1000, linear_start=0.00085, linear_end=0.012):
         betas = torch.linspace(linear_start ** 0.5, linear_end ** 0.5, timesteps, dtype=torch.float64) ** 2
         alphas = 1. - betas
-        alphas_cumprod = torch.tensor(np.cumprod(alphas, axis=0), dtype=torch.float32)
+        alphas_cumprod = torch.tensor(np.cumprod(alphas.numpy(), axis=0), dtype=torch.float32).clone().detach()
+        self.alphas_cumprod = alphas_cumprod  # Assuming you need to store it as an attribute
+        self.unet = unet
 
         self.sigmas = ((1 - alphas_cumprod) / alphas_cumprod) ** 0.5
         self.log_sigmas = self.sigmas.log()
