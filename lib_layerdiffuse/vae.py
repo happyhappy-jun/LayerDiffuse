@@ -1,15 +1,17 @@
-import torch.nn as nn
-import torch
+from typing import Optional, Tuple
+
 import cv2
 import numpy as np
 import safetensors.torch as sf
-
-from tqdm import tqdm
-from typing import Optional, Tuple
+import torch
+import torch.nn as nn
 from diffusers.configuration_utils import ConfigMixin, register_to_config
-from diffusers.models.modeling_utils import ModelMixin
-from diffusers.models.unets.unet_2d_blocks import UNetMidBlock2D, get_down_block, get_up_block
 from diffusers.models.autoencoders.vae import DiagonalGaussianDistribution
+from diffusers.models.modeling_utils import ModelMixin
+from diffusers.models.unets.unet_2d_blocks import (UNetMidBlock2D,
+                                                   get_down_block,
+                                                   get_up_block)
+from tqdm import tqdm
 
 
 def zero_module(module):

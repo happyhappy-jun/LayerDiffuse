@@ -1,20 +1,21 @@
 import os
 
+
+from LayerDiffuse.models.download import download_models
+from LayerDiffuse.pipelines.pipeline import KDiffusionStableDiffusionXLPipeline
+
 os.environ['HF_HOME'] = 'D:/hf_home'
 
 import numpy as np
-import torch
-import memory_management
 import safetensors.torch as sf
-
-from PIL import Image
-from diffusers_kdiffusion_sdxl import KDiffusionStableDiffusionXLPipeline
+import torch
 from diffusers import AutoencoderKL, UNet2DConditionModel
 from diffusers.models.attention_processor import AttnProcessor2_0
+from PIL import Image
 from transformers import CLIPTextModel, CLIPTokenizer
-from lib_layerdiffuse.vae import TransparentVAEDecoder, TransparentVAEEncoder
-from lib_layerdiffuse.utils import download_model
 
+from LayerDiffuse.utils import memory_management
+from lib_layerdiffuse.vae import TransparentVAEDecoder, TransparentVAEEncoder
 
 # Load models
 
@@ -46,24 +47,11 @@ vae.set_attn_processor(AttnProcessor2_0())
 
 # Download Mode
 
-path_ld_diffusers_sdxl_attn = download_model(
-    url='https://huggingface.co/lllyasviel/LayerDiffuse_Diffusers/resolve/main/ld_diffusers_sdxl_attn.safetensors',
-    local_path='./models/ld_diffusers_sdxl_attn.safetensors'
-)
-
-path_ld_diffusers_sdxl_vae_transparent_encoder = download_model(
-    url='https://huggingface.co/lllyasviel/LayerDiffuse_Diffusers/resolve/main/ld_diffusers_sdxl_vae_transparent_encoder.safetensors',
-    local_path='./models/ld_diffusers_sdxl_vae_transparent_encoder.safetensors'
-)
-
-path_ld_diffusers_sdxl_vae_transparent_decoder = download_model(
-    url='https://huggingface.co/lllyasviel/LayerDiffuse_Diffusers/resolve/main/ld_diffusers_sdxl_vae_transparent_decoder.safetensors',
-    local_path='./models/ld_diffusers_sdxl_vae_transparent_decoder.safetensors'
-)
+model_path = download_models()
 
 # Modify
 
-sd_offset = sf.load_file(path_ld_diffusers_sdxl_attn)
+sd_offset = sf.load_file(model_path["attn"])
 sd_origin = unet.state_dict()
 keys = sd_origin.keys()
 sd_merged = {}
@@ -77,8 +65,8 @@ for k in sd_origin.keys():
 unet.load_state_dict(sd_merged, strict=True)
 del sd_offset, sd_origin, sd_merged, keys, k
 
-transparent_encoder = TransparentVAEEncoder(path_ld_diffusers_sdxl_vae_transparent_encoder)
-transparent_decoder = TransparentVAEDecoder(path_ld_diffusers_sdxl_vae_transparent_decoder)
+transparent_encoder = TransparentVAEEncoder(model_path["encoder"])
+transparent_decoder = TransparentVAEDecoder(model_path["decoder"])
 
 # Pipelines
 

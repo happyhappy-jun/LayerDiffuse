@@ -1,6 +1,7 @@
-import torch
 import numpy as np
+import torch
 from tqdm.auto import trange
+
 
 @torch.no_grad()
 def sample_dpmpp_2m(model, x, sigmas, extra_args=None, callback=None, disable=None):

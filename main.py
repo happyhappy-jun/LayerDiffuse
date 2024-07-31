@@ -1,13 +1,11 @@
 import os
+
 import numpy as np
-import torch
 from PIL import Image
-from transformers.benchmark.benchmark_utils import Memory
 
 from models.download import download_models
 from models.load_models import ModelLoader
 from pipelines.pipeline import KDiffusionStableDiffusionXLPipeline
-from utils.image_utils import numpy2pytorch, resize_without_crop
 from utils.memory_management import load_models_to_gpu, unload_all_models
 
 os.environ['HF_HOME'] = 'D:/hf_home'

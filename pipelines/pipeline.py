@@ -1,13 +1,13 @@
-from typing import Optional, Union, List
+from typing import List, Optional, Union
 
 import torch
-from diffusers.pipelines.stable_diffusion_xl.pipeline_output import StableDiffusionXLPipelineOutput
+from diffusers.pipelines.stable_diffusion_xl.pipeline_output import \
+    StableDiffusionXLPipelineOutput
 from diffusers.pipelines.stable_diffusion_xl.pipeline_stable_diffusion_xl_img2img import \
     StableDiffusionXLImg2ImgPipeline
 from diffusers.utils.torch_utils import randn_tensor
 
-from LayerDiffuse.diffusers_kdiffusion_sdxl import sample_dpmpp_2m
-from LayerDiffuse.pipelines.sampler import KModel
+from LayerDiffuse.pipelines.sampler import KModel, sample_dpmpp_2m
 
 
 class KDiffusionStableDiffusionXLPipeline(StableDiffusionXLImg2ImgPipeline):
