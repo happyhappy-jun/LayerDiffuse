@@ -1,3 +1,5 @@
+LayerDiffuse/imgs/*
+
 hf_download/
 private/
 *.safetensors
