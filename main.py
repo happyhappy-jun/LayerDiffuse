@@ -3,6 +3,7 @@ import os
 import numpy as np
 from PIL import Image
 
+from LayerDiffuse.utils.image_utils import get_binary_mask, save_image
 from models.download import download_models
 from models.load_models import ModelLoader
 from pipelines.pipeline import KDiffusionStableDiffusionXLPipeline
@@ -81,6 +82,8 @@ def main():
     # Save results
     for i, image in enumerate(final_results):
         Image.fromarray(image).save(f'./imgs/outputs/i2i_{i}_transparent.png', format='PNG')
+        binary_mask = get_binary_mask(image)
+        save_image(binary_mask, f'./imgs/outputs/i2i_{i}_transparent_mask.png')
 
     for i, image in enumerate(visualizations):
         Image.fromarray(image).save(f'./imgs/outputs/i2i_{i}_visualization.png', format='PNG')
