@@ -1,4 +1,4 @@
-LayerDiffuse/imgs/*
+LayerDiffuse/imgs/**/*
 
 hf_download/
 private/
