@@ -13,7 +13,7 @@ SDXL_NAME = 'SG161222/RealVisXL_V4.0'
 DEFAULT_NEGATIVE = 'face asymmetry, eyes asymmetry, deformed eyes, open mouth'
 
 
-class ImageGenerator:
+class TransparentImageGenerator:
     def __init__(self, sdxl_name=SDXL_NAME, default_negative=DEFAULT_NEGATIVE):
         self.sdxl_name = sdxl_name
         self.default_negative = default_negative
@@ -55,7 +55,7 @@ class ImageGenerator:
             self.model_loader.unet
         ])
 
-    def generate_images(self, image_path, prompt, guidance_scale=7.0, strength=0.7, num_inference_steps=25):
+    def generate_images(self, image_path, prompt, guidance_scale=7.0, strength=0.7, num_inference_steps=25) -> (np.ndarray, np.ndarray):
         # Load and prepare initial latent
         initial_image = [np.array(Image.open(image_path))]
         initial_latent = self.transparent_encoder(self.model_loader.vae,

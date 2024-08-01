@@ -1,5 +1,5 @@
 
-from lib_layerdiffuse.utils import download_model
+from LayerDiffuse.lib_layerdiffuse.utils import download_model
 
 
 def download_models():
