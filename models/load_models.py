@@ -3,7 +3,7 @@ from diffusers import AutoencoderKL, UNet2DConditionModel
 from safetensors.torch import load_file
 from transformers import CLIPTextModel, CLIPTokenizer
 
-from lib_layerdiffuse.vae import TransparentVAEDecoder, TransparentVAEEncoder
+from LayerDiffuse.lib_layerdiffuse.vae import TransparentVAEDecoder, TransparentVAEEncoder
 
 
 class ModelLoader:

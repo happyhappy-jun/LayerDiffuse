@@ -55,9 +55,10 @@ class TransparentImageGenerator:
             self.model_loader.unet
         ])
 
-    def generate_images(self, image_path, prompt, guidance_scale=7.0, strength=0.7, num_inference_steps=25) -> (np.ndarray, np.ndarray):
+    def generate_images(self, image, prompt, guidance_scale=7.0, strength=0.7, num_inference_steps=25) -> (
+    np.ndarray, np.ndarray):
         # Load and prepare initial latent
-        initial_image = [np.array(Image.open(image_path))]
+        initial_image = [np.array(image)]
         initial_latent = self.transparent_encoder(self.model_loader.vae,
                                                   initial_image) * self.model_loader.vae.config.scaling_factor
         initial_latent = initial_latent.to(dtype=self.model_loader.unet.dtype, device=self.model_loader.unet.device)

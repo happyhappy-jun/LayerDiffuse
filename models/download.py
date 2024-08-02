@@ -1,5 +1,6 @@
 
 from LayerDiffuse.lib_layerdiffuse.utils import download_model
+from config import PROJECT_ROOT
 
 
 def download_models():
@@ -10,6 +11,6 @@ def download_models():
     }
     local_paths = {}
     for name, url in models.items():
-        local_path = f'./models/{name}.safetensors'
+        local_path = PROJECT_ROOT / f'LayerDiffuse/models/{name}.safetensors'
         local_paths[name] = download_model(url, local_path)
     return local_paths
