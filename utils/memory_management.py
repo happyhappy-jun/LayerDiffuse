@@ -3,12 +3,8 @@ from contextlib import contextmanager
 import torch
 
 high_vram = True
-gpu = torch.device('cuda')
 cpu = torch.device('cpu')
-
-torch.zeros((1, 1)).to(gpu, torch.float32)
-torch.cuda.empty_cache()
-
+# torch.cuda.empty_cache()
 models_in_gpu = []
 
 
@@ -26,7 +22,7 @@ def movable_bnb_model(m):
     return
 
 
-def load_models_to_gpu(models):
+def load_models_to_gpu(models, gpu=torch.device('cuda')):
     global models_in_gpu
 
     if not isinstance(models, (tuple, list)):
