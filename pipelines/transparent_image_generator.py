@@ -1,5 +1,6 @@
 import os
 import numpy as np
+import torch
 from PIL import Image
 from LayerDiffuse.models.download import download_models
 from LayerDiffuse.models.load_models import ModelLoader
@@ -10,18 +11,19 @@ from LayerDiffuse.utils.memory_management import load_models_to_gpu, unload_all_
 os.environ['HF_HOME'] = 'D:/hf_home'
 
 SDXL_NAME = 'SG161222/RealVisXL_V4.0'
-DEFAULT_NEGATIVE = 'face asymmetry, eyes asymmetry, deformed eyes, open mouth'
+DEFAULT_NEGATIVE = 'bad quality, worst quality, cartoon style'
 
 
 class TransparentImageGenerator:
-    def __init__(self, sdxl_name=SDXL_NAME, default_negative=DEFAULT_NEGATIVE):
+    def __init__(self, device, sdxl_name=SDXL_NAME, default_negative=DEFAULT_NEGATIVE):
         self.sdxl_name = sdxl_name
         self.default_negative = default_negative
         self.model_loader = None
         self.pipeline = None
         self.transparent_encoder = None
         self.transparent_decoder = None
-
+        self.rng = torch.Generator(device=device).manual_seed(12345)
+        self.device = device
         # Initialize models and pipeline
         self._initialize_models()
 
@@ -53,10 +55,10 @@ class TransparentImageGenerator:
             self.transparent_encoder,
             self.transparent_decoder,
             self.model_loader.unet
-        ])
+        ], device=self.device)
 
     def generate_images(self, image, prompt, guidance_scale=7.0, strength=0.7, num_inference_steps=25) -> (
-    np.ndarray, np.ndarray):
+            np.ndarray, np.ndarray):
         # Load and prepare initial latent
         initial_image = [np.array(image)]
         initial_latent = self.transparent_encoder(self.model_loader.vae,
@@ -77,7 +79,8 @@ class TransparentImageGenerator:
             prompt_embeds=positive_cond,
             negative_prompt_embeds=negative_cond,
             pooled_prompt_embeds=positive_pooler,
-            negative_pooled_prompt_embeds=negative_pooler
+            negative_pooled_prompt_embeds=negative_pooler,
+            generator=self.rng
         )
 
         # Prepare latent for decoding
