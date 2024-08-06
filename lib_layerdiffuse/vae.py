@@ -254,7 +254,7 @@ class TransparentVAEDecoder(torch.nn.Module):
 
         result = []
 
-        for flip, rok in tqdm(args):
+        for flip, rok in tqdm(args, disable=True):
             feed_pixel = pixel.clone()
             feed_latent = latent.clone()
 
